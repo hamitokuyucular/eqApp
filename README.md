@@ -33,7 +33,7 @@ Uygulama; mekânsal veri görselleştirme, temel analiz fonksiyonları ve kullan
 - **Analiz Sonuç** butonu ile analiz çıktıları ayrı bir sonuç ekranında gösterilir.
 - Sonuç ekranında grafikler yer alır:
   - Deprem sayısı dağılımları
-  - Büyüklük (magnitüd) istatistikleri
+  - Büyüklük (magnitude) istatistikleri
   - Zamansal veya mekânsal özet grafikler
 - Grafikler, kullanıcıya hızlı ve anlaşılır bir değerlendirme sunar.
 
