@@ -73,24 +73,28 @@ Uygulamanın kullanıcı arayüzüne ve analiz çıktılara ait ekran görüntü
        alt="Ana harita görünümü" 
        width="75%">
 </p>
+
 - Seçilen sınırlamalara göre deprem noktaları
 <p>
   <img src="image/4.JPG" 
        alt="Seçilen sınırlamalara göre deprem noktaları" 
        width="75%">
 </p>
+
 - Heatmap görünümü
 <p>
   <img src="image/3.JPG" 
        alt="Heatmap görünümü" 
        width="75%">
 </p>
+
 - Analiz sonuç ekranı ve grafikler
 <p>
   <img src="image/5.JPG" 
        alt="Analiz sonuç ekranı ve grafikler" 
        width="75%">
 </p>
+
 - Raster verilerin görünümü
 <p>
   <img src="image/vs30.JPG" width="45%">
