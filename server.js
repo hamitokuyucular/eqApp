@@ -13,6 +13,7 @@ import cityNameRouter from "./routes/CityNameRouter.js";
 import withinRouter from "./routes/withinRouter.js";
 import vs30Router from "./routes/vs30Router.js";
 import pgaRouter from "./routes/pgaRouter.js";
+import dangerZone from "./routes/dangerZoneRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,7 @@ app.use("/api", cityNameRouter);
 app.use("/api", withinRouter);
 app.use("/api", vs30Router);
 app.use("/api", pgaRouter);
+app.use("/api", dangerZone);
 
 // Health check
 app.get("/health", (req, res) => {

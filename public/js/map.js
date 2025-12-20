@@ -11,6 +11,7 @@ export let cityLayer;
 export let fayLayer;
 export let vs30Layer;
 export let pga2023Layer;
+export let dangerZoneLayer;
 export let eqPointLayer;
 export let heatmapLayer;
 
@@ -124,11 +125,28 @@ export async function initMap() {
         })
     });
 
+    dangerZoneLayer = new ol.layer.Image({
+        title: 'Tehlike (PGA × VS30 × Fay Yakınlık)',
+        visible: false,
+        opacity: 0.5,
+        source: new ol.source.ImageWMS({
+            url: "http://localhost:5000/api/danger",
+            params: {
+                layers: 'mygisdb:tehlike_final3',
+                format: 'image/png',
+                transparent: true,
+            },
+            serverType: 'geoserver',
+            crossOrigin: 'anonymous'
+        })
+    });
+
     baseGroup.getLayers().push(baseLayer);
     dataGroup.getLayers().push(cityLayer);
     dataGroup.getLayers().push(fayLayer);
-    dataGroup.getLayers().push(vs30Layer);    
-    dataGroup.getLayers().push(pga2023Layer);    
+    dataGroup.getLayers().push(vs30Layer);
+    dataGroup.getLayers().push(pga2023Layer);
+    dataGroup.getLayers().push(dangerZoneLayer);
     dataGroup.getLayers().push(eqPointLayer);
     dataGroup.getLayers().push(heatmapLayer);
 
@@ -159,6 +177,7 @@ export async function initMap() {
     heatmapLayer.setZIndex(9);
     vs30Layer.setZIndex(1);
     pga2023Layer.setZIndex(2);
+    dangerZoneLayer.setZIndex(3);
 }
 
 export function updateMap(geojson) {
