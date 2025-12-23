@@ -2,7 +2,7 @@ import express from "express";
 import axios from "axios";
 import config from "config";
 import { URLSearchParams } from "url";
-import { aqDataAddPostgis } from "../services/addPostgis.js";
+import { aqDataAddPostgis } from "../services/aqDataAddPostgis.js";
 
 const afadRouter = express.Router();
 
