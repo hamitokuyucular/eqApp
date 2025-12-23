@@ -8,6 +8,7 @@ import { addCityName } from "./cityNameApi.js";
 import { fetchWithinAnalysisResult } from "./withinAnalysisApi.js";
 import { showWithinResultLayer } from "./withinResults.js";
 import { showStatsPanel } from "./showStatsPanel.js";
+import { enableDrawPoint, disableDrawPoint } from "./pointDraw.js";
 
 await initMap();
 await addCityName();
@@ -27,6 +28,14 @@ document.getElementById("drawBoxBtn").addEventListener("click", () => {
 
 document.getElementById("togglePanel").addEventListener("click", () => {
     document.getElementById("statsPanel").classList.toggle("visible");
+});
+
+document.getElementById("addPointBtn").addEventListener("click", function () {
+    enableDrawPoint(map);
+});
+
+document.getElementById("closePointBtn").addEventListener("click", function () {
+    disableDrawPoint(map);
 });
 
 document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async() => {

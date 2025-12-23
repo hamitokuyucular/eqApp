@@ -167,6 +167,7 @@ export async function initMap() {
     const layerSwitcher = new ol.control.LayerSwitcher({
         reverse: false,
     });
+    layerSwitcher.setTarget(document.getElementById('layerSwitcherContainer'));
     map.addControl(layerSwitcher);
 
     baseGroup.setZIndex(0);

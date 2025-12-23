@@ -23,6 +23,8 @@
         <!-- Map Section -->
         <main id="map-container" class="flex-grow-1 position-relative">
             <div id="map" class="w-100 h-100"></div>
+            <div id="layerSwitcherContainer"></div>
+
             <div id="ol-popup" class="ol-popup">
                 <a href="#" id="ol-popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
@@ -100,6 +102,25 @@
                 <button id="cityFilterAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analizi Başlat</button><br>
                 <button id="togglePanel" type="button" class="btn btn-secondary w-100 mt-2">Analiz Sonuçları</button>
             </div>
+
+            <div class="pointsAnalysisDiv">
+                <label class="form-label">Nokta Ekleyip Analiz Et</label>
+                <button id="addPointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta Ekle</button>
+                <button id="closePointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta eklemeyi durdur</button>
+                <button id="pointAnalysistBtn" type="button" class="btn btn-secondary w-100 mt-2">Analiz Et</button>
+            </div>
+
+            <div id="pointNameModal" class="modal hidden">
+                <div class="modal-content">
+                    <h3>Nokta Adı</h3>
+                    <input type="text" id="pointNameInput" class="form-control" placeholder="Nokta ismini giriniz" />
+                    <div class="modal-actions">
+                        <button id="confirmPointName" class="btn btn-secondary">Onayla</button>
+                        <button id="cancelPointName" class="btn btn-secondary">İptal</button>
+                    </div>
+                </div>
+            </div>
+
 
         </main>
 
