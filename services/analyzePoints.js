@@ -6,6 +6,8 @@ export async function analyzePoints() {
             SELECT
                 p.id,
                 p.name,
+                ilce.adm1_tr AS il,
+                ilce.adm2_tr AS ilce,
                 ROUND(ST_Y(p.geom)::numeric,5) AS lat,
                 ROUND(ST_X(p.geom)::numeric,5) AS lon,
                 ST_Value(vs.rast, p.geom) AS vs,
@@ -13,6 +15,9 @@ export async function analyzePoints() {
                 ST_Value(t.rast, p.geom)/1000 AS hazard,
                 nearest.facilities
             FROM temp_user_points p
+
+            LEFT JOIN ilce
+                ON ST_Within(p.geom, ilce.geom)
 
             LEFT JOIN tc_vs30 vs
                 ON ST_Intersects(vs.rast, p.geom)
@@ -28,6 +33,9 @@ export async function analyzePoints() {
                     json_build_object(
                         'tesis_adi', s.tesis_adi,
                         'distance_km', s.distance_km,
+                        'il', s.il,
+                        'ilce', s.ilce,
+                        'mahalle', s.mahalle,
                         'lat', s.lat,
                         'lon', s.lon
                     )
@@ -36,6 +44,9 @@ export async function analyzePoints() {
                 FROM (
                     SELECT
                         top.tesis_adi,
+                        top.il,
+                        top.ilce,
+                        top.mahalle,
                         ROUND(ST_Y(top.geom)::numeric,5) AS lat,
                         ROUND(ST_X(top.geom)::numeric,5) AS lon,
                         ROUND(
