@@ -1,3 +1,5 @@
+import { map } from "./map.js";
+
 let pointDraw = null;
 let pointSource = null;
 let pointLayer = null;
@@ -30,6 +32,21 @@ confirmBtn.addEventListener('click', () => {
     }
 
     pendingFeature.set('name', value);
+
+    const geom = pendingFeature.getGeometry();
+    const coord = geom.getCoordinates(); // CRS (3857)
+
+    const [lon, lat] = ol.proj.transform(
+        coord,
+        map.getView().getProjection(),
+        'EPSG:4326'
+    );
+
+    pendingFeature.setProperties({
+        lat,
+        lon
+    });
+    
     closePointNameModal();
 });
 
@@ -61,6 +78,16 @@ export function enableDrawPoint(map) {
     });
 
     map.addInteraction(pointDraw);
+}
+
+export function getDrawnPoints() {
+    if (!pointSource) return [];
+
+    return pointSource.getFeatures().map(f => ({
+        name: f.get('name'),
+        lat: f.get('lat'),
+        lon: f.get('lon')
+    }));
 }
 
 export function disableDrawPoint(map) {

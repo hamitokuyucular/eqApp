@@ -8,7 +8,8 @@ import { addCityName } from "./cityNameApi.js";
 import { fetchWithinAnalysisResult } from "./withinAnalysisApi.js";
 import { showWithinResultLayer } from "./withinResults.js";
 import { showStatsPanel } from "./showStatsPanel.js";
-import { enableDrawPoint, disableDrawPoint } from "./pointDraw.js";
+import { enableDrawPoint, disableDrawPoint, getDrawnPoints } from "./pointDraw.js";
+import {fetchPointAnalysisResult} from "./pointAnalysisApi.js";
 
 await initMap();
 await addCityName();
@@ -37,6 +38,11 @@ document.getElementById("addPointBtn").addEventListener("click", function () {
 document.getElementById("closePointBtn").addEventListener("click", function () {
     disableDrawPoint(map);
 });
+
+document.getElementById("pointAnalysisBtn").addEventListener("click", async () => {
+    const points  = getDrawnPoints();
+    await fetchPointAnalysisResult(points);
+})
 
 document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async() => {
     const city = document.getElementById("citySelect").value;
