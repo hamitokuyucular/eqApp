@@ -13,7 +13,8 @@ export async function analyzePoints() {
                 ST_Value(vs.rast, p.geom) AS vs,
                 ST_Value(pga.rast, p.geom)/1000 AS pga,
                 ST_Value(t.rast, p.geom)/1000 AS hazard,
-                nearest.facilities
+                nearest.facilities,
+                nearestF.faultline
             FROM temp_user_points p
 
             LEFT JOIN ilce
@@ -62,6 +63,33 @@ export async function analyzePoints() {
                     LIMIT 3
                 ) s
             ) nearest ON true
+
+            LEFT JOIN LATERAL(
+                SELECT json_agg(
+                    json_build_object(
+                        'fayadi', f.fayadi,
+                        'segmentadi', f.segmentadi,
+                        'distance_km', f.distance_km
+                    )
+                    ORDER by f.distance_km
+                ) AS faultline
+                FROM (
+                    SELECT 
+                        fay.fayadi,
+                        fay.segmentadi,
+                        ROUND(
+                            (
+                                ST_Distance(
+                                    p.geom::geography,
+                                    fay.geom::geography
+                                ) / 1000
+                            )::numeric, 3
+                        ) AS distance_km
+                    FROM diri_faylar fay
+                    ORDER BY p.geom <-> fay.geom
+                    LIMIT 1
+                ) f
+            ) nearestF ON true
 
             ORDER BY p.id
         `);

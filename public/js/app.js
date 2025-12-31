@@ -9,7 +9,9 @@ import { fetchWithinAnalysisResult } from "./withinAnalysisApi.js";
 import { showWithinResultLayer } from "./withinResults.js";
 import { showStatsPanel } from "./showStatsPanel.js";
 import { enableDrawPoint, disableDrawPoint, getDrawnPoints } from "./pointDraw.js";
-import {fetchPointAnalysisResult} from "./pointAnalysisApi.js";
+import { fetchPointAnalysisResult } from "./pointAnalysisApi.js";
+import { renderInfoPanel } from "./renderInfoPanel.js";
+import { pointAnalysisCarts } from "../pointAnalysisCarts.js";
 
 await initMap();
 await addCityName();
@@ -41,7 +43,9 @@ document.getElementById("closePointBtn").addEventListener("click", function () {
 
 document.getElementById("pointAnalysisBtn").addEventListener("click", async () => {
     const points  = getDrawnPoints();
-    await fetchPointAnalysisResult(points);
+    const pointAnalysisResult = await fetchPointAnalysisResult(points);
+    await renderInfoPanel(pointAnalysisResult);
+    await pointAnalysisCarts(pointAnalysisResult);
 })
 
 document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async() => {
@@ -53,3 +57,13 @@ document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async
     await showWithinResultLayer(map, withinData, city);
     showStatsPanel(withinData);
 });
+
+document.getElementById("showAnalysisBtn").addEventListener("click", () => {
+    const isVisible = infoPanel.style.display === "block";
+
+    document.getElementById("infoPanel").style.display = isVisible ? "none" : "block";
+});
+
+document.getElementById("closePanel").onclick = () => {
+    infoPanel.style.display = "none";
+};

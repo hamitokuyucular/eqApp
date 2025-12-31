@@ -96,7 +96,7 @@
 
             <div class="cityFilterAnalysisDiv">
                 <label class="form-label">Şehir Bazında Filtrele</label>
-                <select id="citySelect" class="form-select" aria-label="Default select example">
+                <select id="citySelect" class="form-select">
                     <option value="">Bir Şehir Seç</option>
                 </select>
                 <button id="cityFilterAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analizi Başlat</button><br>
@@ -108,6 +108,7 @@
                 <button id="addPointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta Ekle</button>
                 <button id="closePointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta eklemeyi durdur</button>
                 <button id="pointAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analiz Et</button>
+                <button id="showAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analiz Sonuçları</button>
             </div>
 
             <div id="pointNameModal" class="modal hidden">
@@ -121,6 +122,30 @@
                 </div>
             </div>
 
+            <div id="infoPanel" >
+                <h6 class="bg-dark text-white text-center py-3">Analiz Sonuçları <a href="#" id="closePanel" class="closePanel"></a></h6>
+
+                <div id="pointsContainer"></div>
+                <div id="chartsSection" class="charts-section">
+                
+                    <div class="chart-card m-3">
+                        <h5>VS30 Değerleri (m/s)</h5>
+                        <canvas id="vs30Chart"></canvas>
+                    </div>
+                
+                    <div class="chart-card m-3">
+                        <h5>PGA Değerleri (g)</h5>
+                        <canvas id="pgaChart"></canvas>
+                    </div>
+                
+                    <div class="chart-card m-3">
+                        <h5>Tehlike İndeksi</h5>
+                        <canvas id="hazardChart"></canvas>
+                    </div>
+                
+                </div>
+
+            </div>
 
         </main>
 
