@@ -1,5 +1,3 @@
-import { renderInfoPanel } from "./renderInfoPanel.js";
-
 export async function fetchPointAnalysisResult(points) {
     if (points.length === 0) {
         alert("Analiz için en az 1 nokta eklemelisiniz.");
@@ -12,7 +10,6 @@ export async function fetchPointAnalysisResult(points) {
     });
     const result = await res.json();
     
-    renderInfoPanel(result.data);
     document.getElementById("infoPanel").style.display = "block";
 
     return result.data
