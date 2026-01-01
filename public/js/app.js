@@ -11,7 +11,7 @@ import { showStatsPanel } from "./showStatsPanel.js";
 import { enableDrawPoint, disableDrawPoint, getDrawnPoints } from "./pointDraw.js";
 import { fetchPointAnalysisResult } from "./pointAnalysisApi.js";
 import { renderInfoPanel } from "./renderInfoPanel.js";
-import { pointAnalysisCarts } from "../pointAnalysisCarts.js";
+import { pointAnalysisCarts } from "./pointAnalysisCarts.js";
 
 await initMap();
 await addCityName();
