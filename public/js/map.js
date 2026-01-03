@@ -46,7 +46,7 @@ export async function initMap() {
 
     eqPointLayer = new ol.layer.Vector({
         title: 'Deprem Merkez Noktaları',
-        visible: true,
+        visible: false,
         source: new ol.source.Vector(),
         style: eqPointStyle,
     });
@@ -94,7 +94,7 @@ export async function initMap() {
     });
 
     vs30Layer = new ol.layer.Image({
-        title: 'VS30',
+        title: 'Vs30',
         visible: false,
         opacity: 0.5,
         source: new ol.source.ImageWMS({
@@ -126,7 +126,7 @@ export async function initMap() {
     });
 
     dangerZoneLayer = new ol.layer.Image({
-        title: 'Tehlike (PGA × VS30 × Fay Yakınlık)',
+        title: 'Deprem Tehlike İndeksi',
         visible: false,
         opacity: 0.5,
         source: new ol.source.ImageWMS({
@@ -179,7 +179,46 @@ export async function initMap() {
     vs30Layer.setZIndex(1);
     pga2023Layer.setZIndex(2);
     dangerZoneLayer.setZIndex(3);
+
+    cityLayer.on("change:visible", () => {
+        document.getElementById("legend-il").style.display =
+            cityLayer.getVisible() ? "block" : "none";
+    });
+
+    fayLayer.on("change:visible", () => {
+        document.getElementById("legend-fay").style.display =
+            fayLayer.getVisible() ? "block" : "none";
+    });
+
+    pga2023Layer.on("change:visible", () => {
+        document.getElementById("legend-pga").style.display =
+            pga2023Layer.getVisible() ? "block" : "none";
+    });
+
+    dangerZoneLayer.on("change:visible", () => {
+        document.getElementById("legend-danger").style.display =
+            dangerZoneLayer.getVisible() ? "block" : "none";
+    });
+
+    vs30Layer.on("change:visible", () => {
+        document.getElementById("legend-vs30").style.display =
+            vs30Layer.getVisible() ? "block" : "none";
+    });
+
+    eqPointLayer.on("change:visible", () => {
+        heatmapLayer.setVisible(false)
+        document.getElementById("legend-eq").style.display =
+            eqPointLayer.getVisible() ? "block" : "none";
+    });
+
+    heatmapLayer.on("change:visible", () => {
+        eqPointLayer.setVisible(false)
+        document.getElementById("legend-heatmap").style.display =
+            heatmapLayer.getVisible() ? "block" : "none";
+    });
 }
+
+
 
 export function updateMap(geojson) {
     const features = new ol.format.GeoJSON().readFeatures(geojson, {

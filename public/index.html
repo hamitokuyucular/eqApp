@@ -134,7 +134,7 @@
                     </div>
                 
                     <div class="chart-card m-3">
-                        <h5>PGA Değerleri (g)</h5>
+                        <h5>Sismik Tehlike PGA(g)475 v2023.1</h5>
                         <canvas id="pgaChart"></canvas>
                     </div>
                 
@@ -148,6 +148,124 @@
             </div>
 
         </main>
+
+        <div id="legendContainer">
+            <div id="legend-il" class="legend" style="display:block">
+                <div class="legend-title">İl Sınırları</div>
+                <div class="legend-bar il"></div>
+            </div>
+            <div id="legend-fay" class="legend" style="display:block">
+                <div class="legend-title">Diri Faylar</div>
+                <div class="legend-bar fay"></div>
+            </div>
+            <div id="legend-pga" class="legend" style="display:none">
+                <div class="legend-title">Sismik Tehlike PGA(g)475 v2023.1</div>
+                <div class="legend-bar pga"></div>
+                <div class="legend-labels">
+                    <span></span>
+                    <span>0.1</span>
+                    <span>0.2</span>
+                    <span>0.3</span>
+                    <span>0.4</span>
+                    <span>0.5</span>
+                    <span></span>
+                </div>
+            </div>
+            <div id="legend-danger" class="legend" style="display:none">
+                <div class="legend-title">Deprem Tehlike İndeksi</div>
+                <div class="legend-bar danger"></div>
+                <div class="legend-labels">
+                    <span></span>
+                    <span>0.2</span>
+                    <span>0.4</span>
+                    <span>0.6</span>
+                    <span>0.8</span>
+                    <span></span>
+                </div>
+            </div>
+            <div id="legend-vs30" class="legend" style="display:none">
+                <div class="legend-title">Vs30 (m/s)</div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #b10026"></span>
+                    <span>≤ 180</span>
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #fd8d3c"></span>
+                    <span>180-240</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #feb24c"></span>
+                    <span>240-300</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #ffeda0"></span>
+                    <span>300-360</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #addd8e"></span>
+                    <span>360-490</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #78c679"></span>
+                    <span>490-600</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #41ab5d"></span>
+                    <span>600-760</span>  
+                </div>
+                <div class="legend-labels vs30">
+                    <span class="legend-label-color" style="background: #004529"></span>
+                    <span>≥ 760</span>  
+                </div>
+            </div>
+            <div id="legend-eq" class="legend" style="display:none">
+                <div class="legend-title">Deprem Büyüklüğü</div>
+
+                <div class="legend-row">
+                    <span class="legend-dot mag8"></span>
+                    <span>≥ 8.0</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag7"></span>
+                    <span>7.0 – 7.9</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag6"></span>
+                    <span>6.0 – 6.9</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag5"></span>
+                    <span>5.0 – 5.9</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag4"></span>
+                    <span>4.0 – 4.9</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag3"></span>
+                    <span>3.0 – 3.9</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot mag2"></span>
+                    <span>&lt; 3.0</span>
+                </div>
+            </div>
+            <div id="legend-heatmap" class="legend" style="display:none;">
+                <div class="legend-title">Deprem Isı Haritası</div>
+
+                <div class="legend-bar heatmap"></div>
+
+                <div class="legend-labels">
+                    <span>Düşük</span>
+                    <span>Yüksek</span>
+                </div>
+            
+                <div class="legend-heatmap-note">
+                    Yoğunluk, deprem büyüklüğü ile ağırlıklandırılmıştır.
+                </div>
+            </div>
+
+        </div>
 
         <div id="statsPanel" class="statsPanel hidden">
             <a href="#" id="statsPanel-closer" class="statsPanel-closer"></a>

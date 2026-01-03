@@ -350,3 +350,201 @@ canvas:active {
     font-weight: bold;
     margin-top: 2px;
 }
+
+#legendContainer{
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 8px;
+    padding-bottom: 3px;
+    border-radius: 4px;
+    z-index: 800;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+#legendContainer::-webkit-scrollbar {
+    width: 1px;
+    /* scrollbar genişliği */
+}
+
+#legendContainer::-webkit-scrollbar-thumb {
+    background: #b5b5b5;
+    border-radius: 8px;
+}
+
+#legendContainer::-webkit-scrollbar-track {
+    background: transparent;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.legend {
+    width: 260px;
+    font-size: 11px;
+    color: #000000;
+    background: rgba(255, 255, 255, 0.86);
+    padding: 6px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.legend-title {
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.legend-bar {
+    height: 14px;
+    margin: 4px 0;
+    border-radius: 2px;
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* İL özel renk rampı */
+.il {
+    background: linear-gradient(
+        to right,
+        rgba(55, 126, 184, 0.059)
+    );
+    border: 2px solid  #265980;
+    width: 18px;
+}
+
+/* FAY özel renk rampı */
+.fay {
+    background: linear-gradient(
+        to right,
+        #005df6
+    );
+    height: 3px;
+    width: 30px;
+}
+
+/* PGA özel renk rampı */
+.pga {
+    background: linear-gradient(
+        to right,
+        #ffffc0,
+        #fed977,
+        #fea245,
+        #f24523,
+        #bd0026,
+        #a6005e
+    );
+}
+
+/* DANGER özel renk rampı */
+.danger {
+    background: linear-gradient(
+        to right,
+        #3b0f70,
+        #2c7bb6,
+        #00a6ca,
+        #7fd34e,
+        #f9d057,
+        #f29e2e,
+        #e34a33,
+        #7f0000 
+    );
+}
+
+/* VS30 özel renk rampı */
+.legend-labels.vs30{
+    display: flex;
+    justify-content:start;
+}
+
+/* VS30 özel renk rampı */
+.legend-label-color{
+    width: 18px; 
+    height: 14px;
+    margin-right: 5px;
+    border-radius: 2px;
+}
+
+/* EQ özel renk rampı */
+.legend-dot {
+    border-radius: 50%;
+    border: 1px solid #333;
+    display: inline-block;
+}
+
+/* Boyut + renk birlikte */
+.mag8 {
+    width: 30px;
+    height: 30px;
+    background: #7B1FA2;
+}
+
+.mag7 {
+    width: 27px;
+    height: 27px;
+    background: rgba(211, 47, 47, 1);
+}
+
+.mag6 {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 87, 36, 1);
+}
+
+.mag5 {
+    width: 21px;
+    height: 21px;
+    background: rgba(255, 152, 0, 1);
+}
+
+.mag4 {
+    width: 17px;
+    height: 17px;
+    background: rgba(255, 235, 59, 1);
+}
+
+.mag3 {
+    width: 14px;
+    height: 14px;
+    background: rgba(139, 195, 74, 1);
+}
+
+.mag2 {
+    width: 11px;
+    height: 11px;
+    background: rgba(76, 175, 80, 1);
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.heatmap {
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 255, 0),
+        rgba(0, 0, 255, 1),
+        rgba(0, 255, 255, 1),
+        rgba(0, 255, 0, 1),
+        rgba(255, 255, 0, 1),
+        rgba(255, 0, 0, 1)
+    );
+}
+
+.legend-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+.legend-heatmap-note {
+    font-size: 10px;
+    margin-top: 4px;
+}

@@ -21,6 +21,7 @@ document.getElementById("fetchBtn").addEventListener("click", async () => {
     const filters = getFilters();
     const data = await fetchEqData(filters);
     updateMap(data);
+    eqPointLayer.setVisible(true);
     maxEqFunction(data); 
 });
 
