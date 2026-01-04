@@ -1,4 +1,4 @@
-export async function renderInfoPanel(data) {
+export async function renderInfoPanel(data, map) {
     const container = document.getElementById("pointsContainer");
     container.innerHTML = "";
 
@@ -42,9 +42,20 @@ export async function renderInfoPanel(data) {
                 <div class="point-section-title">Toplanma Alanları</div>
                 ${p.facilities.map((f, i) => `
                     <div class="facility-item">
-                        <span><b>${i + 1}. ${f.tesis_adi}</b></span>
-                        <span>${f.il} / ${f.ilce} / ${f.mahalle}</span>
-                        <span class="facility-distance">${f.distance_km} km</span>
+                        <div class="box">
+                            <span><b>${i + 1}. ${f.tesis_adi}</b></span>
+                            <span>${f.il} / ${f.ilce} / ${f.mahalle}</span>
+                            <span class="facility-distance">${f.distance_km} km</span>
+                        </div>
+                        <div <div class="box" style="margin:7px; margin-right: 70px">
+                            <button type="button" class="directions-btn btn btn-sm btn-outline-secondary mt-2 mb-2"
+                                data-origin-lat="${p.lat}"
+                                data-origin-lon="${p.lon}"
+                                data-dest-lat="${f.lat}"
+                                data-dest-lon="${f.lon}">
+                                Yol tarifi al
+                            </button>
+                        </div>
                     </div>
                 `).join("")}
             </div>
@@ -54,10 +65,38 @@ export async function renderInfoPanel(data) {
             const open = body.style.display === "block";
             document.querySelectorAll(".point-body").forEach(b => b.style.display = "none");
             body.style.display = open ? "none" : "block";
+
+            const coord = ol.proj.fromLonLat([p.lon, p.lat]);
+            map.getView().animate({
+                center: coord,
+                zoom: 14,
+                duration: 700
+            });
         });
 
         card.appendChild(header);
         card.appendChild(body);
         container.appendChild(card);
     });
+
+    container.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("directions-btn")) return;
+
+    const btn = e.target;
+
+    const oLat = btn.dataset.originLat;
+    const oLon = btn.dataset.originLon;
+    const dLat = btn.dataset.destLat;
+    const dLon = btn.dataset.destLon;
+
+    const params = new URLSearchParams({
+        api: 1,
+        origin: `${oLat},${oLon}`,
+        destination: `${dLat},${dLon}`,
+        travelmode: "driving"
+    });
+
+    const url = `https://www.google.com/maps/dir/?${params.toString()}`;
+    window.open(url, "_blank");
+});
 }

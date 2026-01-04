@@ -45,7 +45,7 @@ document.getElementById("closePointBtn").addEventListener("click", function () {
 document.getElementById("pointAnalysisBtn").addEventListener("click", async () => {
     const points  = getDrawnPoints();
     const pointAnalysisResult = await fetchPointAnalysisResult(points);
-    await renderInfoPanel(pointAnalysisResult);
+    await renderInfoPanel(pointAnalysisResult, map);
     await pointAnalysisCarts(pointAnalysisResult);
 })
 

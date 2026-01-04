@@ -205,14 +205,7 @@ export async function initMap() {
             vs30Layer.getVisible() ? "block" : "none";
     });
 
-    eqPointLayer.on("change:visible", () => {
-        heatmapLayer.setVisible(false)
-        document.getElementById("legend-eq").style.display =
-            eqPointLayer.getVisible() ? "block" : "none";
-    });
-
     heatmapLayer.on("change:visible", () => {
-        eqPointLayer.setVisible(false)
         document.getElementById("legend-heatmap").style.display =
             heatmapLayer.getVisible() ? "block" : "none";
     });
