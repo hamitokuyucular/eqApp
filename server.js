@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import afadRouter from "./routes/afadRouter.js";
 import cityRouter from "./routes/cityRouter.js";
 import fayRouter from "./routes/fayRouter.js";
-import cityNameRouter from "./routes/CityNameRouter.js";
+import cityNameRouter from "./routes/cityNameRouter.js";
 import withinRouter from "./routes/withinRouter.js";
 import vs30Router from "./routes/vs30Router.js";
 import pgaRouter from "./routes/pgaRouter.js";
