@@ -1,6 +1,6 @@
 export async function maxEqFunction(geojson) {
 
-    document.getElementById("output").textContent = `Veriler alındı.`;
+    // document.getElementById("output").textContent = `Veriler alındı.`;
     document.getElementById("eqCount").textContent = geojson.features.length;
 
     const maxEq = geojson.features.reduce((acc, curr) => {
@@ -12,4 +12,9 @@ export async function maxEqFunction(geojson) {
     document.getElementById("maxEqDate").textContent = `${props.date}`;
     document.getElementById("maxEqMag").textContent = `${props.magnitude}`;
     document.getElementById("maxEqDep").textContent = `${props.depth}`;
+}
+
+export function toggleStats() {
+    const c = document.getElementById("statsCard");
+    c.style.display = c.style.display === "block" ? "none" : "block";
 }
