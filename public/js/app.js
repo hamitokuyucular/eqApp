@@ -1,7 +1,7 @@
 import { getFilters } from "./filters.js";
 import { fetchEqData } from "./eqApi.js";
 import { map, eqPointLayer, initMap,  updateMap } from "./map.js";
-import { maxEqFunction } from "./mainStats.js";
+import { maxEqFunction, toggleStats } from "./mainStats.js";
 import { enableDrawRect } from "./draw.js";
 import { popupFunction } from "./popup.js";
 import { addCityName } from "./cityNameApi.js";
