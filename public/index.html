@@ -2,298 +2,530 @@
 <html lang="tr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Deprem Görselleştirme Uygulaması</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINAL</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css">
     <link rel="stylesheet" href="https://unpkg.com/ol-layerswitcher@4.1.2/dist/ol-layerswitcher.css" />
 
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
-<body>
-    <header class="bg-dark text-white text-center py-2">
-        <h5>Deprem Analiz ve Görselleştirme Uygulaması</h5>
-    </header>
+<body class="d-flex flex-column">
 
-    <div class="d-flex" id="main-container">
+    <!-- NAVBAR -->
+    <nav class="navbar bg-dark">
+        <div class="container-fluid">
+            <button class="btn btn-outline-light me-2 d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <span class="navbar-brand text-white mx-auto">Deprem Analiz ve Görselleştirme</span>
+        </div>
+    </nav>
 
-        <!-- Map Section -->
-        <main id="map-container" class="flex-grow-1 position-relative">
-            <div id="map" class="w-100 h-100"></div>
+    <!-- ANA ALAN -->
+    <div class="d-flex main-wrapper">
+
+        <!-- ALERT ALANI -->
+        <div class="toast-container position-fixed top-1 start-50 translate-middle-x" style="z-index: 9999">
+
+            <!-- Deprem Verileri Alındı -->
+            <div id="eqToats" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Bilgi</strong>
+                    <small>şimdi</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white">
+                    AFAD API ile deprem verileri alındı.
+                </div>
+            </div>
+
+            <!-- Şehir Bazlı Filtre Yapıldı -->
+            <div id="cityFilterToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Bilgi</strong>
+                    <small>şimdi</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white">
+                    <!-- JS -->
+                </div>
+            </div>
+
+            <!-- Boş şehir Uyarısı-->
+            <div id="cityFilterErrToast" class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Uyarı!</strong>
+                    <small>şimdi</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white">
+                    Önce bir şehir seçiniz.
+                </div>
+            </div>
+
+            <!-- Nokta Bazlı Analiz Yapıldı -->
+            <div id="pointAnalysisToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Bilgi</strong>
+                    <small>şimdi</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body text-white">
+                    Nokta bazlı analizler yapıldı. Sonuçları görüntüleyebilirsiniz.
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR / OFFCANVAS -->
+        <div class="offcanvas offcanvas-start offcanvas-lg p-0" id="sidebar">
+
+            <!-- MOBİL HEADER -->
+            <div class="offcanvas-header d-lg-none">
+                <h4 class="text-dark mt-2">
+                    <i class="bi bi-globe-americas"></i> Deprem Analiz
+                </h4>
+                <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+            </div>
+
+            <!-- ORTAK SIDEBAR İÇERİĞİ -->
+            <div class="sidebar-content p-3 overflow-auto h-100">
+
+                <!-- HEADER PILLS -->
+                <div class="nav nav-pills nav-fill mb-3 custom-pills">
+                    <div class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-filter">
+                            <i class="bi bi-filter"></i> Filtrele
+                        </button>
+                    </div>
+                    <div class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-city">
+                            <i class="bi bi-buildings"></i> Şehir
+                        </button>
+                    </div>
+                    <div class="nav-item">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-point">
+                            <i class="bi bi-geo-alt"></i> Nokta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+
+                    <!-- FİLTRE -->
+                    <div class="tab-pane fade show active" id="pills-filter">
+                        <div class="mb-3">
+                            <label class="form-label">Tarih Aralığı <span style="color: gray;">(Zorunlu
+                                    alan)</span></label>
+                            <div class="input-group">
+                                <input id="date-start" type="date" class="form-control" value="2023-02-05">
+                                <input id="date-end" type="date" class="form-control" value="2023-02-07">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Büyüklük Aralığı</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Min</span>
+                                <input id="minmag" type="number" step="0.1" class="form-control">
+                                <span class="input-group-text">Max</span>
+                                <input id="maxmag" type="number" step="0.1" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Derinlik Aralığı (km)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Min</span>
+                                <input id="mindepth" type="number" class="form-control">
+                                <span class="input-group-text">Max</span>
+                                <input id="maxdepth" type="number" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Veri Limiti</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Limit</span>
+                                <input id="limit" type="number" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="card mb-3 bg-light border">
+                            <div class="card-body p-2">
+                                <label class="form-label d-block">Konum Seçimi</label>
+
+                                <ul class="nav nav-tabs nav-fill small mb-2">
+                                    <li class="nav-item">
+                                        <a class="nav-link active p-1" data-bs-toggle="tab" href="#draw-mode">Çizim</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link p-1" data-bs-toggle="tab" href="#manual-mode">Manuel</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active text-center" id="draw-mode">
+                                        <button id="drawBoxBtn" class="btn btn-outline-secondary w-100 btn-sm">
+                                            <i class="bi bi-bounding-box-circles"></i> Haritada Dikdörtgen Çiz
+                                        </button>
+                                    </div>
+                                    <div class="tab-pane fade" id="manual-mode">
+                                        <div class="row g-1">
+                                            <div class="col-6"><input id="minlat" class="form-control form-control-sm"
+                                                    placeholder="Min Lat"></div>
+                                            <div class="col-6"><input id="maxlat" class="form-control form-control-sm"
+                                                    placeholder="Max Lat"></div>
+                                            <div class="col-6"><input id="minlon" class="form-control form-control-sm"
+                                                    placeholder="Min Lon"></div>
+                                            <div class="col-6"><input id="maxlon" class="form-control form-control-sm"
+                                                    placeholder="Max Lon"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button id="fetchBtn" class="btn btn-success w-75" data-bs-dismiss="offcanvas">
+                                <i class="bi bi-cloud-download"></i> Verileri Getir
+                            </button>
+
+                            <button id="statsCardBtn" class="btn btn-outline-secondary w-25" data-bs-dismiss="offcanvas">
+                                <i class="bi bi-bar-chart-fill"></i> Özet
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- ŞEHİR -->
+                    <div class="tab-pane fade" id="pills-city">
+                        <div class="alert alert-info small">
+                            Önce "Filtrele" sekmesinden veri çekiniz.
+                        </div>
+                        <div class="cityFilterAnalysisDiv mb-3">
+                            <label class="form-label">Şehir Bazında Filtrelemek Şehir Seçin</label>
+                            <select id="citySelect" class="form-select">
+                                <option value="" selected disabled>Şehir seçiniz...</option>
+                            </select>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button id="cityFilterAnalysisBtn" class="btn btn-success" data-bs-dismiss="offcanvas">
+                                <i class="bi bi-play-circle"></i>
+                                Şehir Bazında Filtrele</button>
+                            <button id="togglePanel" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
+                                data-bs-target="#statsPanel"><i class="bi bi-list-columns"></i>
+                                Sonuçları
+                                Gör</button>
+                        </div>
+                    </div>
+
+                    <!-- NOKTA -->
+                    <div class="tab-pane fade" id="pills-point">
+                        <div class="alert alert-warning small">
+                            <ul class="mb-0">
+                                <li>Harita üzerine tıklayarak nokta ekleyebilirsiniz.</li>
+                                <li>Eklediğiniz noktalara ait erişebileceğiniz bilgiler:
+                                    <ul>
+                                        <li>Zemin bilgisi (Vs30 değeri)</li>
+                                        <li>Bölgede beklenen en şiddetli yer sarsıntısı (PGA değeri)</li>
+                                        <li>En yakın üç toplanma alanının bilgisi ve yol tarifi</li>
+                                        <li>Noktalara ait grafiksel açıklamalar</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="pointsAnalysisDiv d-grid gap-2 mb-3">
+                            <button id="addPointBtn" class="btn btn-outline-primary" data-bs-dismiss="offcanvas">
+                                <i class="bi bi-pin-map-fill"></i>
+                                Nokta Ekle
+                            </button>
+                            <button id="closePointBtn" class="btn btn-outline-danger"><i class="bi bi-stop-circle"></i>
+                                Eklemeyi Durdur
+                            </button>
+                        </div>
+                        <hr>
+                        <div class="d-grid gap-2">
+                            <button id="pointAnalysisBtn" class="btn btn-success">
+                                <i class="bi bi-graph-up"></i> 
+                                Analiz Et
+                            </button>
+                            <button id="showAnalysisBtn" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
+                                data-bs-target="#infoPanel">
+                                <i class="bi bi-table"></i>
+                                Sonuçları Görüntüle
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- HARİTA ALANI-->
+        <div class="flex-grow-1 map-container d-flex align-items-center justify-content-center">
+
+            <!-- Map -->
+            <div id="map" style="width: 100%; height: 100%;"></div>
+
+            <!-- LayerSwitcher -->
             <div id="layerSwitcherContainer"></div>
 
-            <div id="ol-popup" class="ol-popup">
-                <a href="#" id="ol-popup-closer" class="ol-popup-closer"></a>
+            <!-- OL Popup -->
+            <div id="popup" class="ol-popup shadow">
+                <button type="button" class="btn-close btn-close-dark popup-closer" id="popup-closer"></button>
                 <div id="popup-content"></div>
             </div>
 
-            <!-- Sidebar -->
-            <aside id="sidebar" class="bg-light border-end p-3">
-                <h6>Filtreleme</h6>
-
-                <form id="filterForm">
-
-                    <div class="mb-2">
-                        <label class="form-label">Tarih Aralığı *</label>
-                        <input type="date" class="form-control mb-1" id="start" value="2023-02-05" />
-                        <input type="date" class="form-control" id="end" value="2023-02-07" />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Büyüklük Aralığı</label>
-                        <input type="number" step="0.1" class="form-control mb-1" id="minmag" placeholder="Min" />
-                        <input type="number" step="0.1" class="form-control" id="maxmag" placeholder="Max" />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Derinlik Aralığı (km)</label>
-                        <input type="number" class="form-control mb-1" id="mindepth" placeholder="Min" />
-                        <input type="number" class="form-control" id="maxdepth" placeholder="Max" />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Koordinat Aralığı: </label>
-                        <input type="number" step="0.001" class="form-control mb-1" id="minlat" placeholder="Min Lat"
-                            style="display: true;" />
-                        <input type="number" step="0.001" class="form-control mb-1" id="maxlat" placeholder="Max Lat"
-                            style="display: true;" />
-                        <input type="number" step="0.001" class="form-control mb-1" id="minlon" placeholder="Min Lon"
-                            style="display: true;" />
-                        <input type="number" step="0.001" class="form-control mb-1" id="maxlon" placeholder="Max Lon"
-                            style="display: true;" />
-                        <button type="button" id="drawBoxBtn"
-                            class="btn btn-sm btn-outline-secondary mt-2 mb-2">Haritada Alan Seç</button>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Limit:</label>
-                        <input type="number" id="limit" class="form-control mb-1" placeholder="Veri limitini giriniz">
-                    </div>
-
-                    <button id="fetchBtn" type="button" class="btn btn-secondary w-100 mt-2">Verileri Getir</button>
-                </form>
-
-                <hr />
-
-                <div id="stats">
-                    <h6>Deprem Sayısı: <span id="eqCount"></span></h6>
-                    <h6>En Büyük Deprem:</h6>
-                    <div class="text-center">
-                        <p><span id="maxEq"></span></p>
-                        <p>Tarih: <span id="maxEqDate"></span></p>
-                        <p>Büyüklük: <span id="maxEqMag"></span></p>
-                        <p>Derinlik: <span id="maxEqDep"></span></p>
-                    </div>
+            <!-- Basit İstastistik Kartı -->
+            <div id="statsCard" class="card stats-overlay">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
+                    <h6 class="m-0"><i class="bi bi-bar-chart-fill"></i> Özet İstatistikler</h6>
+                    <button id="statsCard-close" type="button" class="btn-close btn-close-white btn-sm"></button>
                 </div>
 
-                <hr />
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Toplam Deprem:</span>
+                        <span id="eqCount" class="badge bg-danger fs-6"></span>
+                    </div>
 
-                <pre id="output">Henüz veri yok...</pre>
-            </aside>
+                    <hr class="my-2">
 
-            <div class="cityFilterAnalysisDiv">
-                <label class="form-label">Şehir Bazında Filtrele</label>
-                <select id="citySelect" class="form-select">
-                    <option value="">Bir Şehir Seç</option>
-                </select>
-                <button id="cityFilterAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analizi Başlat</button><br>
-                <button id="togglePanel" type="button" class="btn btn-secondary w-100 mt-2">Analiz Sonuçları</button>
-            </div>
+                    <h6 class="text-danger small fw-bold">EN BÜYÜK DEPREM</h6>
+                    <div class="row g-2 small">
+                        <div class="col-3 text-muted">Lokasyon:</div>
+                        <div id="maxEq" class="col-9 fw-bold text-end"></div>
 
-            <div class="pointsAnalysisDiv">
-                <label class="form-label">Nokta Ekleyip Analiz Et</label>
-                <button id="addPointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta Ekle</button>
-                <button id="closePointBtn" type="button" class="btn btn-secondary w-100 mt-2">Nokta eklemeyi durdur</button>
-                <button id="pointAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analiz Et</button>
-                <button id="showAnalysisBtn" type="button" class="btn btn-secondary w-100 mt-2">Analiz Sonuçları</button>
-            </div>
+                        <div class="col-3 text-muted">Tarih:</div>
+                        <div id="maxEqDate" class="col-9 fw-bold text-end"></div>
 
-            <div id="pointNameModal" class="modal hidden">
-                <div class="modal-content">
-                    <h3>Nokta Adı</h3>
-                    <input type="text" id="pointNameInput" class="form-control" placeholder="Nokta ismini giriniz" />
-                    <div class="modal-actions">
-                        <button id="confirmPointName" class="btn btn-secondary">Onayla</button>
-                        <button id="cancelPointName" class="btn btn-secondary">İptal</button>
+                        <div class="col-3 text-muted">Büyüklük:</div>
+                        <div id="maxEqMag" class="col-9 fw-bold text-end text-danger"></div>
+
+                        <div class="col-3 text-muted">Derinlik:</div>
+                        <div id="maxEqDep" class="col-9 fw-bold text-end"></div>
                     </div>
                 </div>
             </div>
 
-            <div id="infoPanel" >
-                <h6 class="bg-dark text-white text-center py-3">Analiz Sonuçları <a href="#" id="closePanel" class="closePanel"></a></h6>
-
-                <div id="pointsContainer"></div>
-                <div id="chartsSection" class="charts-section">
-                
-                    <div class="chart-card m-3">
-                        <h5>VS30 Değerleri (m/s)</h5>
-                        <canvas id="vs30Chart"></canvas>
+            <!-- Legend -->
+            <div id="legendWrapper" class="legend-wrapper">
+                <button id="legendToggleBtn" class="btn btn-sm btn-light">
+                    <i class="bi bi-list"></i></i><span>Lejant aç/kapat</span>
+                </button>
+                <div id="legendContainer">
+                    <div id="legend-il" class="legend" style="display:block">
+                        <div class="legend-title">İl Sınırları</div>
+                        <div class="legend-bar il"></div>
                     </div>
-                
-                    <div class="chart-card m-3">
-                        <h5>Sismik Tehlike PGA(g)475 v2023.1</h5>
-                        <canvas id="pgaChart"></canvas>
+                    <div id="legend-fay" class="legend" style="display:block">
+                        <div class="legend-title">Diri Faylar</div>
+                        <div class="legend-bar fay"></div>
                     </div>
-                
-                    <div class="chart-card m-3">
-                        <h5>Tehlike İndeksi</h5>
-                        <canvas id="hazardChart"></canvas>
+                    <div id="legend-pga" class="legend" style="display:none">
+                        <div class="legend-title">Sismik Tehlike PGA(g)475 v2023.1</div>
+                        <div class="legend-bar pga"></div>
+                        <div class="legend-labels">
+                            <span></span>
+                            <span>0.1</span>
+                            <span>0.2</span>
+                            <span>0.3</span>
+                            <span>0.4</span>
+                            <span>0.5</span>
+                            <span></span>
+                        </div>
                     </div>
-                
-                </div>
+                    <div id="legend-danger" class="legend" style="display:none">
+                        <div class="legend-title">Deprem Tehlike İndeksi</div>
+                        <div class="legend-bar danger"></div>
+                        <div class="legend-labels">
+                            <span></span>
+                            <span>0.2</span>
+                            <span>0.4</span>
+                            <span>0.6</span>
+                            <span>0.8</span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div id="legend-vs30" class="legend" style="display:none">
+                        <div class="legend-title">Vs30 (m/s)</div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #b10026"></span>
+                            <span>≤ 180</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #fd8d3c"></span>
+                            <span>180-240</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #feb24c"></span>
+                            <span>240-300</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #ffeda0"></span>
+                            <span>300-360</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #addd8e"></span>
+                            <span>360-490</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #78c679"></span>
+                            <span>490-600</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #41ab5d"></span>
+                            <span>600-760</span>
+                        </div>
+                        <div class="legend-labels vs30">
+                            <span class="legend-label-color" style="background: #004529"></span>
+                            <span>≥ 760</span>
+                        </div>
+                    </div>
+                    <div id="legend-eq" class="legend">
+                        <div class="legend-title">Deprem Büyüklüğü</div>
 
-            </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag8"></span>
+                            <span>≥ 8.0</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag7"></span>
+                            <span>7.0 – 7.9</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag6"></span>
+                            <span>6.0 – 6.9</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag5"></span>
+                            <span>5.0 – 5.9</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag4"></span>
+                            <span>4.0 – 4.9</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag3"></span>
+                            <span>3.0 – 3.9</span>
+                        </div>
+                        <div class="legend-row">
+                            <span class="legend-dot mag2"></span>
+                            <span>&lt; 3.0</span>
+                        </div>
+                    </div>
+                    <div id="legend-heatmap" class="legend" style="display:none;">
+                        <div class="legend-title">Deprem Isı Haritası</div>
 
-        </main>
+                        <div class="legend-bar heatmap"></div>
 
-        <div id="legendContainer">
-            <div id="legend-il" class="legend" style="display:block">
-                <div class="legend-title">İl Sınırları</div>
-                <div class="legend-bar il"></div>
-            </div>
-            <div id="legend-fay" class="legend" style="display:block">
-                <div class="legend-title">Diri Faylar</div>
-                <div class="legend-bar fay"></div>
-            </div>
-            <div id="legend-pga" class="legend" style="display:none">
-                <div class="legend-title">Sismik Tehlike PGA(g)475 v2023.1</div>
-                <div class="legend-bar pga"></div>
-                <div class="legend-labels">
-                    <span></span>
-                    <span>0.1</span>
-                    <span>0.2</span>
-                    <span>0.3</span>
-                    <span>0.4</span>
-                    <span>0.5</span>
-                    <span></span>
-                </div>
-            </div>
-            <div id="legend-danger" class="legend" style="display:none">
-                <div class="legend-title">Deprem Tehlike İndeksi</div>
-                <div class="legend-bar danger"></div>
-                <div class="legend-labels">
-                    <span></span>
-                    <span>0.2</span>
-                    <span>0.4</span>
-                    <span>0.6</span>
-                    <span>0.8</span>
-                    <span></span>
-                </div>
-            </div>
-            <div id="legend-vs30" class="legend" style="display:none">
-                <div class="legend-title">Vs30 (m/s)</div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #b10026"></span>
-                    <span>≤ 180</span>
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #fd8d3c"></span>
-                    <span>180-240</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #feb24c"></span>
-                    <span>240-300</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #ffeda0"></span>
-                    <span>300-360</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #addd8e"></span>
-                    <span>360-490</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #78c679"></span>
-                    <span>490-600</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #41ab5d"></span>
-                    <span>600-760</span>  
-                </div>
-                <div class="legend-labels vs30">
-                    <span class="legend-label-color" style="background: #004529"></span>
-                    <span>≥ 760</span>  
-                </div>
-            </div>
-            <div id="legend-eq" class="legend" style="display:block">
-                <div class="legend-title">Deprem Büyüklüğü</div>
+                        <div class="legend-labels">
+                            <span>Düşük</span>
+                            <span>Yüksek</span>
+                        </div>
 
-                <div class="legend-row">
-                    <span class="legend-dot mag8"></span>
-                    <span>≥ 8.0</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag7"></span>
-                    <span>7.0 – 7.9</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag6"></span>
-                    <span>6.0 – 6.9</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag5"></span>
-                    <span>5.0 – 5.9</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag4"></span>
-                    <span>4.0 – 4.9</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag3"></span>
-                    <span>3.0 – 3.9</span>
-                </div>
-                <div class="legend-row">
-                    <span class="legend-dot mag2"></span>
-                    <span>&lt; 3.0</span>
-                </div>
-            </div>
-            <div id="legend-heatmap" class="legend" style="display:none;">
-                <div class="legend-title">Deprem Isı Haritası</div>
+                        <div class="legend-heatmap-note">
+                            Yoğunluk, deprem büyüklüğü ile ağırlıklandırılmıştır.
+                        </div>
+                    </div>
 
-                <div class="legend-bar heatmap"></div>
-
-                <div class="legend-labels">
-                    <span>Düşük</span>
-                    <span>Yüksek</span>
-                </div>
-            
-                <div class="legend-heatmap-note">
-                    Yoğunluk, deprem büyüklüğü ile ağırlıklandırılmıştır.
                 </div>
             </div>
 
         </div>
 
-        <div id="statsPanel" class="statsPanel hidden">
-            <a href="#" id="statsPanel-closer" class="statsPanel-closer"></a>
-            <h5 class="text-center mb-2">Analiz Sonuçları</h5>
-            <div id="basicStats" class="p-2 small"></div>
+        <!-- City Filer Analysis Panel -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="statsPanel" aria-labelledby="statsPanelLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" id="statsPanelLabel">Analiz Sonuçları</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                
+                <!-- Grafikler -->
+                <div id="basicStats" class="alert alert-info small"></div><br>
+                <hr><br>
+                <canvas id="mainChart" height="140"></canvas><br>
+                <hr><br>
+                <canvas id="magChart" height="140"></canvas><br>
+                <hr><br>
 
-            <canvas id="mainChart" height="140"></canvas><br>
-            <canvas id="magChart" height="140"></canvas><br>
-            <!-- <canvas id="depthChart" height="140"></canvas> -->
-            
-            <h6 class="mt-2 mb-3">Deprem Listesi</h6>
-            <table class="table table-sm table-striped" id="eqTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tarih</th>
-                        <th>İlçe</th>
-                        <th>Büyüklük</th>
-                        <th>Derinlik</th>
-                        <th>RMS</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+                <!-- Nokta Listesi -->
+                <h6 class="mt-2 mb-3">Deprem Listesi</h6>
+                <table class="table table-sm table-striped" id="eqTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tarih</th>
+                            <th>İlçe</th>
+                            <th>Büyüklük</th>
+                            <th>Derinlik</th>
+                            <th>RMS</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
+
+        <!-- Point Acceptance Modal -->
+        <div id="pointNameModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Nokta Adı</h3>
+                <input type="text" id="pointNameInput" class="form-control" placeholder="Nokta ismini giriniz" />
+                <div class="modal-actions">
+                    <button id="confirmPointName" class="btn btn-secondary">Onayla</button>
+                    <button id="cancelPointName" class="btn btn-secondary">İptal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Point Analysis Info Panel  -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="infoPanel" aria-labelledby="infoPanelLabel">
+            <div class="offcanvas-header">
+                <h4 class="offcanvas-title" id="infoPanelLabel">Analiz Sonuçları</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body overflow-auto">
+
+                <!-- Nokta Listesi -->
+                <div class="accordion accordion-flush" id="pointsContainer"></div>
+
+                <!-- Grafikler -->
+                <div class="p-3 border-top">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h6>VS30 Değerleri (m/s)</h6>
+                            <canvas id="vs30Chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h6>PGA (g) – 475 yıl</h6>
+                            <canvas id="pgaChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h6>Tehlike İndeksi</h6>
+                            <canvas id="hazardChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <footer class="bg-dark text-white text-center py-2">
+    <!-- FOOTER -->
+    <footer class="bg-dark border-top text-center text-white py-2 small">
         Kaynak: AFAD API
     </footer>
 
@@ -308,6 +540,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 
     <script src="./js/app.js" type="module"></script>
+
 </body>
 
 </html>
