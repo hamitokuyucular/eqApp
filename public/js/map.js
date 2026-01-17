@@ -158,7 +158,7 @@ export async function initMap() {
             analysisGroup
         ],
         view: new ol.View({
-            center: ol.proj.fromLonLat([32.7, 38.4]),
+            center: ol.proj.fromLonLat([35, 39.0]),
             zoom: 6.2,
             constrainResolution: false
         })
