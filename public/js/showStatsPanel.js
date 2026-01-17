@@ -3,12 +3,12 @@ import { updateCharts } from "./updateCharts.js";
 import { updateTable } from "./updateTable.js";
 export let selectedEq = [];
 
-const statsPanelCloserDOM = document.getElementById('statsPanel-closer');
-statsPanelCloserDOM.onclick = function () {
-    document.getElementById("statsPanel").classList.toggle("visible");
-    statsPanelCloserDOM.blur();
-    return false;
-};
+// const statsPanelCloserDOM = document.getElementById('statsPanel-closer');
+// statsPanelCloserDOM.onclick = function () {
+//     document.getElementById("statsPanel").classList.toggle("visible");
+//     statsPanelCloserDOM.blur();
+//     return false;
+// };
 
 export function showStatsPanel(analysisData) {
 
