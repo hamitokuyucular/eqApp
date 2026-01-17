@@ -1,132 +1,55 @@
-html,
-body {
-    height: 100%;
-    margin: 0;
+/* BOOTSTRAP CSS DUZENLEMELERI */
+
+.custom-pills .nav-link {
+    color: #495057;                /* pasif yazı */
 }
 
-#main-container {
-    height: calc(100vh - 88px);
+.custom-pills .nav-link.active {
+    background-color: #343a40;     /* aktif arka plan */
+    color: #fff;                   /* aktif yazı */
 }
 
-#sidebar {
-    position: absolute;
-    width: 320px;
-    height: 98%;
-    top: 5px;
-    left: 5px;
-    /* opacity: 0.4; */
-    border-radius: 10px;
+.custom-pills .nav-link:hover {
+    background-color: #ced4da;
+}
+
+.custom-pills .nav-link.active:hover {
+    background-color: #343a40; 
+}
+
+#statsPanel{
+    --bs-offcanvas-width: 600px;
+}
+
+#infoPanel{
+    --bs-offcanvas-width: 600px;
+}
+
+#infoPanel .offcanvas-body {
+    max-height: calc(100vh - 56px);
     overflow-y: auto;
-    transition: transform 0.3s ease;
 }
 
-#sidebar.hidden {
-    transform: translateX(-100%);
-}
-
-#sidebar:hover {
-    opacity: 1.0;
-}
-
-#sidebar::-webkit-scrollbar {
+.offcanvas-body::-webkit-scrollbar {
     width: 6px;
-    /* scrollbar genişliği */
 }
 
-#sidebar::-webkit-scrollbar-thumb {
+.offcanvas-body::-webkit-scrollbar-thumb {
     background: #b5b5b5;
     border-radius: 8px;
 }
 
-#sidebar::-webkit-scrollbar-track {
+.offcanvas-body::-webkit-scrollbar-track {
     background: transparent;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#map-container {
-    height: 100%;
-}
-
-#map {
-    width: 100%;
-    height: 100%;
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1030;
-}
-
-.ol-popup {
-    position: absolute;
-    background-color: white;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #cccccc;
-    bottom: 12px;
-    left: -50px;
-    min-width: 280px;
-    display: none;
-}
-
-.ol-popup:after,
-.ol-popup:before {
-    top: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-}
-
-.ol-popup:after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 48px;
-    margin-left: -10px;
-}
-
-.ol-popup:before {
-    border-top-color: #cccccc;
-    border-width: 11px;
-    left: 48px;
-    margin-left: -11px;
-}
-
-.ol-popup-closer {
-    text-decoration: none;
-    position: absolute;
-    top: 2px;
-    right: 8px;
-}
-
-.ol-popup-closer:after {
-    content: "✖";
-}
-
-.cityFilterAnalysisDiv {
-    position: absolute;
-    bottom: 10px;
-    left: 330px;
-    width: 220px;
-    height: 180px;
-    padding: 10px;
-    background: white;
-    opacity: 0.4;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    text-align: center;
-}
-
-.cityFilterAnalysisDiv:hover {
-    opacity: 1.0;
+/* LAYER SWITCHER */
+.layer-switcher {
+    top: 10px !important;
+    left: 10px !important;
+    right: auto !important;
 }
 
 .ol-zoom {
@@ -135,92 +58,32 @@ footer {
     left: auto !important;
 }
 
-.statsPanel {
-    position: fixed;
-    right: 0;
-    top: 56px;
-    width: 600px;
-    height: 87%;
-    background: #fff;
-    padding: 20px;
-    /* opacity: 0.4; */
-    border-radius: 10px;
-    overflow-y: auto;
-    transform: translateX(100%);
-    transition: transform  0.3s ease-in-out;
-    z-index: 900;
+/* HTML DUZENLEMELERI */
+
+html,
+body {
+    height: 100%;
+    margin: 0;
 }
 
-.statsPanel.visible {
-    transform: translateX(-50px);
+.main-wrapper {
+    height: calc(100vh - 58px - 36px);
 }
 
-.statsPanel-closer {
-    text-decoration: none;
+.map-container {
+    height: 100%;
+    position: relative;
+    background-color: #e9ecef;
+}
+
+.stats-overlay {
     position: absolute;
-    top: 2px;
-    right: 8px;
-}
-
-.statsPanel-closer:after {
-    content: "✖";
-}
-
-.statsPanel::-webkit-scrollbar {
-    width: 6px;
-}
-
-.statsPanel::-webkit-scrollbar-thumb {
-    background: #b5b5b5;
-    border-radius: 8px;
-}
-
-.statsPanel::-webkit-scrollbar-track {
-    background: transparent;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.layer-switcher {
-    top: 10px !important;
-    left: 330px !important;
-    right: auto !important;
-    bottom: auto !important;
-    /* opacity: 0.5; */
-    z-index: 9999 !important;
-}
-
-.layer-switcher:hover {
-    opacity: 1.0;
-}
-
-canvas {
-    cursor: grab;
-}
-canvas:active {
-    cursor: grabbing;
-}
-
-.pointsAnalysisDiv {
-    position: absolute;
-    bottom: 200px;
-    left: 330px;
-    width: 220px;
-    height: 230px;
-    padding: 10px;
-    background: white;
-    opacity: 0.4;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    bottom: 20px;
+    left: 20px;
+    width: 330px;
     z-index: 1000;
-    text-align: center;
-}
-
-.pointsAnalysisDiv:hover {
-    opacity: 1.0;
-}
-
-.modal.hidden {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
     display: none;
 }
 
@@ -232,6 +95,10 @@ canvas:active {
     align-items: center;
     justify-content: center;
     z-index: 9999;
+}
+
+.modal.hidden {
+    display: none;
 }
 
 .modal-content {
@@ -248,116 +115,47 @@ canvas:active {
     gap: 8px;
 }
 
-#infoPanel {
+
+.ol-popup {
     position: absolute;
-    top: 10px;
-    left: 700px;
-    width: 500px;
-    height: 98%;
-    /* max-height: calc(100vh - 80px); */
-    background: #ffffff;
-    border-radius: 6px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    overflow-y: auto;
-    font-size: 13px;
-    z-index: 2000;
-    display: none;
-}
-
-#infoPanel::-webkit-scrollbar {
-    width: 6px;
-    /* scrollbar genişliği */
-}
-
-#infoPanel::-webkit-scrollbar-thumb {
-    background: #b5b5b5;
+    background-color: #ffffff; /* dark */
+    color: #000000;
+    padding: 12px 14px;
     border-radius: 8px;
+    min-width: 280px;
+    bottom: 12px;
+    left: -140px;
+    z-index: 1000;
 }
 
-#infoPanel::-webkit-scrollbar-track {
-    background: transparent;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.closePanel {
-    text-decoration: none;
+.ol-popup::after {
+    content: "";
     position: absolute;
-    top: 2px;
-    right: 8px;
+    bottom: -10px;
+    left: 50%;
+    margin-left: -10px;
+    border-width: 10px 10px 0;
+    border-style: solid;
+    border-color: #ffffff transparent;
 }
 
-.closePanel:after {
-    content: "✖";
+.popup-closer {
+    position: absolute;
+    top: 6px;
+    right: 6px;
 }
 
-#infoPanel h2 {
-    margin: 0;
-    padding: 12px;
-    background: #2c3e50;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-}
-
-.point-card {
-    border-bottom: 1px solid #ddd;
-}
-
-.point-header {
-    padding: 10px 12px;
-    background: #f5f5f5;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.point-header:hover {
-    background: #eaeaea;
-}
-
-.point-body {
-    display: none;
-    padding: 10px 12px;
-}
-
-.point-section {
-    margin-bottom: 10px;
-}
-
-.point-section-title {
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.value-row {
-    margin-left: 6px;
-    line-height: 1.4em;
-}
-
-.facility-item {
-    padding: 6px;
-    margin-bottom: 6px;
-    background: #f8f8f8;
-    border-radius: 4px;
-    border-left: 3px solid #3498db;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.facility-item span {
-    display: block;
-}
-
-.facility-distance {
-    font-weight: bold;
-    margin-top: 2px;
+#legendWrapper {
+    position: absolute;
+    right: 10px;
+    bottom: 40px;
+    z-index: 800;
 }
 
 #legendContainer{
     position: absolute;
-    right: 10px;
-    bottom: 80px;
+    right: 2px;
+    bottom: 40px;
     background: rgba(255, 255, 255, 0.4);
     padding: 8px;
     padding-bottom: 3px;
@@ -365,6 +163,7 @@ canvas:active {
     z-index: 800;
     max-height: 600px;
     overflow-y: auto;
+    display: none;
 }
 
 #legendContainer::-webkit-scrollbar {
@@ -472,10 +271,17 @@ canvas:active {
 }
 
 /* EQ özel renk rampı */
+.legend-row {
+    display: grid;
+    grid-template-columns: 32px auto;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
 .legend-dot {
     border-radius: 50%;
-    border: 1px solid #333;
-    display: inline-block;
+    justify-self: center;
 }
 
 /* Boyut + renk birlikte */
@@ -521,13 +327,6 @@ canvas:active {
     background: rgba(76, 175, 80, 1);
 }
 
-.legend-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
 .heatmap {
     background: linear-gradient(
         to right,
@@ -550,4 +349,19 @@ canvas:active {
 .legend-heatmap-note {
     font-size: 10px;
     margin-top: 4px;
+}
+
+#infoOffcanvas{
+    border-radius: 10px;
+}
+
+@media (min-width: 992px) {
+    .offcanvas-lg {
+        position: static;
+        transform: none !important;
+        visibility: visible !important;
+        height: 100%;
+        border-right: 1px solid #dee2e6;
+        width: 300px;
+    }
 }
