@@ -23,6 +23,9 @@
             <button class="btn btn-outline-light me-2 d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
                 <i class="bi bi-list"></i>
             </button>
+            <button class="btn btn-outline-secondary btn-sm text-white" data-bs-toggle="offcanvas" data-bs-target="#infoOffcanvas">
+                <i class="bi bi-info-circle"></i> Uygulama Bilgisi
+            </button>
             <span class="navbar-brand text-white mx-auto">Deprem Analiz ve Görselleştirme</span>
         </div>
     </nav>
@@ -196,7 +199,8 @@
                                 <i class="bi bi-cloud-download"></i> Verileri Getir
                             </button>
 
-                            <button id="statsCardBtn" class="btn btn-outline-secondary w-25" data-bs-dismiss="offcanvas">
+                            <button id="statsCardBtn" class="btn btn-outline-secondary w-25"
+                                data-bs-dismiss="offcanvas">
                                 <i class="bi bi-bar-chart-fill"></i> Özet
                             </button>
                         </div>
@@ -252,7 +256,7 @@
                         <hr>
                         <div class="d-grid gap-2">
                             <button id="pointAnalysisBtn" class="btn btn-success">
-                                <i class="bi bi-graph-up"></i> 
+                                <i class="bi bi-graph-up"></i>
                                 Analiz Et
                             </button>
                             <button id="showAnalysisBtn" class="btn btn-outline-dark" data-bs-toggle="offcanvas"
@@ -439,6 +443,132 @@
                 </div>
             </div>
 
+            <!-- Başlangıç Uygulama Bilgisi -->
+            <div class="offcanvas offcanvas-top" tabindex="-1" id="infoOffcanvas" aria-labelledby="infoOffcanvasLabel"
+                style="top: 10%; right: 10%; left: 10%; height: 80%;">
+
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="infoOffcanvasLabel">
+                        Web Tabanlı Deprem Analiz Uygulaması
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Kapat"></button>
+                </div>
+
+                <div class="offcanvas-body">
+
+                    <!-- Amaç -->
+                    <h6>Uygulamanın Amacı</h6>
+                    <p class="small text-muted">
+                        Bu uygulama; AFAD deprem verileri, USGS zemin ve yer ivmesi rasterları
+                        ve ulusal CBS katmanları kullanılarak deprem dağılımı ve
+                        konum bazlı analizlerin web tabanlı olarak yapılmasını sağlar.
+                    </p>
+
+                    <hr>
+
+                    <!-- İşlem Akışı -->
+                    <h6>Uygulama Akışı</h6>
+                    <div class="accordion accordion-flush" id="infoAccordion">
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#step1">
+                                    1. Deprem Verisi Sorgulama
+                                </button>
+                            </h2>
+                            <div id="step1" class="accordion-collapse collapse">
+                                <div class="accordion-body small">
+                                    Tarih (zorunlu), büyüklük, derinlik ve alan filtreleri
+                                    kullanılarak AFAD API üzerinden deprem verileri çağrılır.
+                                    Sonuçlar nokta katmanı ve ısı haritası olarak görüntülenir.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#step2">
+                                    2. Şehir Bazlı Analiz
+                                </button>
+                            </h2>
+                            <div id="step2" class="accordion-collapse collapse">
+                                <div class="accordion-body small">
+                                    Seçilen şehir sınırları içerisindeki depremler filtrelenir.
+                                    Grafikler ve detaylı liste ile sonuçlar sunulur.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse"
+                                    data-bs-target="#step3">
+                                    3. Nokta Bazlı Yer Analizi
+                                </button>
+                            </h2>
+                            <div id="step3" class="accordion-collapse collapse">
+                                <div class="accordion-body small">
+                                    Kullanıcı tarafından tanımlanan noktalar için zemin,
+                                    sismik tehlike, fay mesafesi ve en yakın toplanma alanları
+                                    analiz edilir.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- Teknik Terimler -->
+                    <h6>Teknik Terimler</h6>
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item"><b>Vs30:</b> İlk 30 m zemin ortalama kayma dalgası hızı (m/s)</li>
+                        <li class="list-group-item"><b>PGA:</b> Maksimum yer ivmesi (g)</li>
+                        <li class="list-group-item"><b>Isı Haritası:</b> Deprem yoğunluğunu gösteren görselleştirme</li>
+                        <li class="list-group-item"><b>Fay Mesafesi:</b> En yakın aktif fay hattına uzaklık</li>
+                    </ul>
+
+                    <hr>
+
+                    <!-- Veri Kaynakları -->
+                    <h6>Veri Kaynakları</h6>
+                    <ul class="small">
+                        <li>
+                            <b>AFAD</b> – T.C. İçişleri Bakanlığı<br>
+                            Türkiye geneli deprem olaylarına ait noktasal veriler
+                        </li>
+                        <li>
+                            <b>MTA</b> – Türkiye Diri Fay Haritası<br>
+                            Türkiye genelindeki aktif fay hatları (vektör)
+                        </li>
+                        <li>
+                            <b>USGS</b> – VS30 Site Condition Map<br>
+                            Yerel zemin koşullarını temsil eden raster veri
+                        </li>
+                        <li>
+                            <b>GEM</b> – Global Seismic Hazard Map (PGA)<br>
+                            Küresel ölçekte olasılıksal sismik tehlike raster verileri
+                        </li>
+                    </ul>
+
+                    <hr>
+
+                    <!-- Uyarı -->
+                    <div class="alert alert-warning small">
+                        Bu uygulamada sunulan analizler bilgilendirme amaçlıdır.
+                        Resmî, mühendislik veya planlama kararları için tek başına
+                        kullanılmamalıdır.
+                    </div>
+
+                    <p class="small text-center mb-0">
+                        Başlamak için <b>Deprem Verilerini Getir</b> butonunu kullanabilirsiniz.
+                    </p>
+
+                </div>
+            </div>
+
         </div>
 
         <!-- City Filer Analysis Panel -->
@@ -448,7 +578,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                
+
                 <!-- Grafikler -->
                 <div id="basicStats" class="alert alert-info small"></div><br>
                 <hr><br>
