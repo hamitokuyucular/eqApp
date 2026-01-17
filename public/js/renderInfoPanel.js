@@ -1,71 +1,78 @@
 export async function renderInfoPanel(data, map) {
+
     const container = document.getElementById("pointsContainer");
     container.innerHTML = "";
 
     data.forEach((p, index) => {
-        const card = document.createElement("div");
-        card.className = "point-card";
 
-        const header = document.createElement("div");
-        header.className = "point-header";
-        header.innerText = `${p.name} (${p.il} / ${p.ilce})`;
+        const itemId = `point-${index}`;
+        const collapseId = `collapse-${index}`;
 
-        const body = document.createElement("div");
-        body.className = "point-body";
+        const item = document.createElement("div");
+        item.className = "accordion-item";
 
-        body.innerHTML = `
-            <div class="point-section">
-                <div class="point-section-title">Konum</div>
-                <div class="value-row">İl: ${p.il}</div>
-                <div class="value-row">İlçe: ${p.ilce}</div>
-            </div>
+        item.innerHTML = `
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#${collapseId}">
+                    ${p.name} (${p.il} / ${p.ilce})
+                </button>
+            </h2>
 
-            <div class="point-section">
-                <div class="point-section-title">Zemin & Tehlike</div>
-                <div class="value-row">Vs30: ${p.vs}</div>
-                <div class="value-row">PGA: ${p.pga}</div>
-                <div class="value-row">Tehlike İndeksi: ${p.hazard}</div>
-            </div>
+            <div id="${collapseId}"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#pointsContainer">
 
-            <div class="point-section">
-                <div class="point-section-title">En Yakın Fay</div>
-                ${
-                        p.faultline.map(f => `
-                        <div class="value-row">
-                            ${f.fayadi} – ${f.distance_km} km
-                        </div>
-                    `).join("")
-                }
-            </div>
+                <div class="accordion-body">
 
-            <div class="point-section">
-                <div class="point-section-title">Toplanma Alanları</div>
-                ${p.facilities.map((f, i) => `
-                    <div class="facility-item">
-                        <div class="box">
-                            <span><b>${i + 1}. ${f.tesis_adi}</b></span>
-                            <span>${f.il} / ${f.ilce} / ${f.mahalle}</span>
-                            <span class="facility-distance">${f.distance_km} km</span>
-                        </div>
-                        <div <div class="box" style="margin:7px; margin-right: 70px">
-                            <button type="button" class="directions-btn btn btn-sm btn-outline-secondary mt-2 mb-2"
-                                data-origin-lat="${p.lat}"
-                                data-origin-lon="${p.lon}"
-                                data-dest-lat="${f.lat}"
-                                data-dest-lon="${f.lon}">
-                                Yol tarifi al
-                            </button>
-                        </div>
+                    <div class="mb-2">
+                        <strong>Konum</strong><br>
+                        İl: ${p.il}<br>
+                        İlçe: ${p.ilce}
                     </div>
-                `).join("")}
+
+                    <div class="mb-2">
+                        <strong>Zemin & Tehlike</strong><br>
+                        Vs30: ${p.vs}<br>
+                        PGA: ${p.pga}<br>
+                        Tehlike İndeksi: ${p.hazard}
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>En Yakın Fay</strong>
+                        ${p.faultline.map(f => `
+                            <div>${f.fayadi} – ${f.distance_km} km</div>
+                        `).join("")}
+                    </div>
+
+                    <div class="mb-2">
+                        <strong>Toplanma Alanları</strong>
+                        ${p.facilities.map((f, i) => `
+                            <div class="border rounded p-2 mb-2">
+                                <div><b>${i + 1}. ${f.tesis_adi}</b></div>
+                                <div class="small text-muted">
+                                    ${f.il} / ${f.ilce} / ${f.mahalle}
+                                </div>
+                                <div>${f.distance_km} km</div>
+
+                                <button class="directions-btn btn btn-sm btn-outline-secondary mt-2"
+                                    data-origin-lat="${p.lat}"
+                                    data-origin-lon="${p.lon}"
+                                    data-dest-lat="${f.lat}"
+                                    data-dest-lon="${f.lon}">
+                                    Yol tarifi al
+                                </button>
+                            </div>
+                        `).join("")}
+                    </div>
+
+                </div>
             </div>
         `;
 
-        header.addEventListener("click", () => {
-            const open = body.style.display === "block";
-            document.querySelectorAll(".point-body").forEach(b => b.style.display = "none");
-            body.style.display = open ? "none" : "block";
-
+        item.querySelector(".accordion-button").addEventListener("click", () => {
             const coord = ol.proj.fromLonLat([p.lon, p.lat]);
             map.getView().animate({
                 center: coord,
@@ -74,29 +81,21 @@ export async function renderInfoPanel(data, map) {
             });
         });
 
-        card.appendChild(header);
-        card.appendChild(body);
-        container.appendChild(card);
+        container.appendChild(item);
     });
 
     container.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("directions-btn")) return;
+        if (!e.target.classList.contains("directions-btn")) return;
 
-    const btn = e.target;
+        const btn = e.target;
 
-    const oLat = btn.dataset.originLat;
-    const oLon = btn.dataset.originLon;
-    const dLat = btn.dataset.destLat;
-    const dLon = btn.dataset.destLon;
+        const params = new URLSearchParams({
+            api: 1,
+            origin: `${btn.dataset.originLat},${btn.dataset.originLon}`,
+            destination: `${btn.dataset.destLat},${btn.dataset.destLon}`,
+            travelmode: "driving"
+        });
 
-    const params = new URLSearchParams({
-        api: 1,
-        origin: `${oLat},${oLon}`,
-        destination: `${dLat},${dLon}`,
-        travelmode: "driving"
+        window.open(`https://www.google.com/maps/dir/?${params}`, "_blank");
     });
-
-    const url = `https://www.google.com/maps/dir/?${params.toString()}`;
-    window.open(url, "_blank");
-});
 }
