@@ -1,7 +1,7 @@
 export async function popupFunction(map, eqPointLayer) {
-    const popupDOM = document.getElementById('ol-popup');
+    const popupDOM = document.getElementById('popup');
     const popupContentDOM = document.getElementById('popup-content');
-    const popupCloserDOM = document.getElementById('ol-popup-closer');
+    const popupCloserDOM = document.getElementById('popup-closer');
 
     const overlay = new ol.Overlay({
         element: popupDOM,
