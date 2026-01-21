@@ -117,7 +117,7 @@ export async function initMap() {
     });
 
     vs30Layer = new ol.layer.Image({
-        title: 'Vs30',
+        title: 'VS30',
         visible: false,
         opacity: 0.5,
         source: new ol.source.ImageWMS({
@@ -148,21 +148,21 @@ export async function initMap() {
         })
     });
 
-    dangerZoneLayer = new ol.layer.Image({
-        title: 'Deprem Tehlike İndeksi',
-        visible: false,
-        opacity: 0.5,
-        source: new ol.source.ImageWMS({
-            url: "http://localhost:5000/api/danger",
-            params: {
-                layers: 'mygisdb:tehlike_final3',
-                format: 'image/png',
-                transparent: true,
-            },
-            serverType: 'geoserver',
-            crossOrigin: 'anonymous'
-        })
-    });
+    // dangerZoneLayer = new ol.layer.Image({
+    //     title: 'Deprem Tehlike İndeksi',
+    //     visible: false,
+    //     opacity: 0.5,
+    //     source: new ol.source.ImageWMS({
+    //         url: "http://localhost:5000/api/danger",
+    //         params: {
+    //             layers: 'mygisdb:tehlike_final3',
+    //             format: 'image/png',
+    //             transparent: true,
+    //         },
+    //         serverType: 'geoserver',
+    //         crossOrigin: 'anonymous'
+    //     })
+    // });
 
     baseGroup.getLayers().push(baseLayer);
     baseGroup.getLayers().push(satelliteLayer);
@@ -171,7 +171,7 @@ export async function initMap() {
     dataGroup.getLayers().push(fayLayer);
     dataGroup.getLayers().push(vs30Layer);
     dataGroup.getLayers().push(pga2023Layer);
-    dataGroup.getLayers().push(dangerZoneLayer);
+    // dataGroup.getLayers().push(dangerZoneLayer);
     dataGroup.getLayers().push(eqPointLayer);
     dataGroup.getLayers().push(heatmapLayer);
 
@@ -203,7 +203,7 @@ export async function initMap() {
     heatmapLayer.setZIndex(9);
     vs30Layer.setZIndex(1);
     pga2023Layer.setZIndex(2);
-    dangerZoneLayer.setZIndex(3);
+    // dangerZoneLayer.setZIndex(3);
 
     cityLayer.on("change:visible", () => {
         document.getElementById("legend-il").style.display =
@@ -220,10 +220,10 @@ export async function initMap() {
             pga2023Layer.getVisible() ? "block" : "none";
     });
 
-    dangerZoneLayer.on("change:visible", () => {
-        document.getElementById("legend-danger").style.display =
-            dangerZoneLayer.getVisible() ? "block" : "none";
-    });
+    // dangerZoneLayer.on("change:visible", () => {
+    //     document.getElementById("legend-danger").style.display =
+    //         dangerZoneLayer.getVisible() ? "block" : "none";
+    // });
 
     vs30Layer.on("change:visible", () => {
         document.getElementById("legend-vs30").style.display =
