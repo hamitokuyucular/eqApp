@@ -79,8 +79,14 @@ document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async
     toast.show();
 });
 
-document.getElementById("showAnalysisBtn").addEventListener("click", () => {
-    const isVisible = infoPanel.style.display === "block";
+document.getElementById("statsCardBtn").addEventListener("click", async() => {
+    toggleStats();
+});
+
+document.getElementById("statsCard-close").addEventListener("click", async() => {
+    toggleStats();
+});
+
 
     document.getElementById("infoPanel").style.display = isVisible ? "none" : "block";
 });
