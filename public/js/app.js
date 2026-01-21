@@ -53,6 +53,9 @@ document.getElementById("pointAnalysisBtn").addEventListener("click", async () =
     const pointAnalysisResult = await fetchPointAnalysisResult(points);
     await renderInfoPanel(pointAnalysisResult, map);
     await pointAnalysisCarts(pointAnalysisResult);
+    const toastDOM = document.getElementById('pointAnalysisToast');
+        const toast = new bootstrap.Toast(toastDOM);
+        toast.show();
 })
 
 document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async() => {
