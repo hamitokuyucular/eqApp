@@ -21,7 +21,10 @@ export async function showWithinResultLayer(map, data, cityName) {
                 })
             }),
             style: eqPointStyle,
-            visible: true
+            visible: true,
+            properties: {
+                legendType: 'eq'
+            }
         });
         
         withinResultLayer[cityName] = layer;

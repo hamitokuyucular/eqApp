@@ -49,6 +49,9 @@ export async function initMap() {
         visible: false,
         source: new ol.source.Vector(),
         style: eqPointStyle,
+        properties: {
+            legendType: 'eq'
+        }
     });
 
     heatmapLayer = new ol.layer.Heatmap({
@@ -209,9 +212,37 @@ export async function initMap() {
         document.getElementById("legend-heatmap").style.display =
             heatmapLayer.getVisible() ? "block" : "none";
     });
+
+    eqPointLayer.on("change:visible", updateEqLegendVisibility);
+
+    analysisGroup.getLayers().on("add", e => {
+        const layer = e.element;
+
+        if (layer.get('legendType') === 'eq') {
+                layer.on("change:visible", updateEqLegendVisibility);
+                updateEqLegendVisibility();
+            }
+        });
 }
 
+function updateEqLegendVisibility() {
+    let visible = false;
 
+    if (eqPointLayer.getVisible()) {
+        visible = true;
+    }
+
+    if (analysisGroup) {
+        analysisGroup.getLayers().forEach(layer => {
+            if (layer.get('legendType') === 'eq' && layer.getVisible()) {
+                visible = true;
+            }
+        });
+    }
+
+    document.getElementById("legend-eq").style.display =
+        visible ? "block" : "none";
+}
 
 export function updateMap(geojson) {
     const features = new ol.format.GeoJSON().readFeatures(geojson, {
