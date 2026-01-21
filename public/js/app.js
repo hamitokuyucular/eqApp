@@ -87,8 +87,12 @@ document.getElementById("statsCard-close").addEventListener("click", async() => 
     toggleStats();
 });
 
+const legendBtn = document.getElementById("legendToggleBtn");
+const legendContainer = document.getElementById("legendContainer");
 
-    document.getElementById("infoPanel").style.display = isVisible ? "none" : "block";
+legendBtn.addEventListener("click", () => {
+    legendContainer.style.display =
+        legendContainer.style.display === "block" ? "none" : "block";
 });
 
 document.getElementById("closePanel").onclick = () => {
