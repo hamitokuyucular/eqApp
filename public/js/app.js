@@ -22,7 +22,13 @@ document.getElementById("fetchBtn").addEventListener("click", async () => {
     const data = await fetchEqData(filters);
     updateMap(data);
     eqPointLayer.setVisible(true);
-    maxEqFunction(data); 
+    maxEqFunction(data);
+    toggleStats();
+
+    const toastDOM = document.getElementById('eqToats');
+    const toast = new bootstrap.Toast(toastDOM);
+    toast.show();
+
 });
 
 document.getElementById("drawBoxBtn").addEventListener("click", () => {
