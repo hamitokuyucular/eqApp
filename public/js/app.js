@@ -60,12 +60,23 @@ document.getElementById("pointAnalysisBtn").addEventListener("click", async () =
 
 document.getElementById("cityFilterAnalysisBtn").addEventListener("click", async() => {
     const city = document.getElementById("citySelect").value;
-    if(!city) return;
+    if(!city) {
+        const toastDOM = document.getElementById('cityFilterErrToast');
+        const toast = new bootstrap.Toast(toastDOM);
+        toast.show();
+        return;
+    };
 
     const withinData = await fetchWithinAnalysisResult(city);
     
     await showWithinResultLayer(map, withinData, city);
     showStatsPanel(withinData);
+
+    const toastDOM = document.getElementById('cityFilterToast');
+    toastDOM.querySelector(".toast-body").innerHTML=
+        `${city} içindeki depremler filtrelendi. Analiz sonuçlarını görüntüleyebilirsiniz!`
+    const toast = new bootstrap.Toast(toastDOM);
+    toast.show();
 });
 
 document.getElementById("showAnalysisBtn").addEventListener("click", () => {
