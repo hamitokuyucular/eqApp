@@ -5,8 +5,9 @@ export let dataGroup;
 export let analysisGroup;
 export let source;
 
-
 export let baseLayer;
+export let osmBaseLayer;
+export let satelliteLayer;
 export let cityLayer;
 export let fayLayer;
 export let vs30Layer;
@@ -35,12 +36,31 @@ export async function initMap() {
     });
 
     baseLayer = new ol.layer.Tile({
-        title: 'Altlık Harita',
+        title: 'Esri – Koyu Gri',
         type: 'base',
         visible: true,
         source: new ol.source.XYZ({
             url: 'https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
             attributions: 'Tiles © Esri, HERE, Garmin, OpenStreetMap'
+        })
+    });
+
+    osmBaseLayer = new ol.layer.Tile({
+        title: 'OpenStreetMap – Standart',
+        type: 'base',
+        visible: false, // varsayılan kapalı
+        source: new ol.source.OSM({
+            attributions: '© OpenStreetMap contributors'
+        })
+    });
+
+    satelliteLayer = new ol.layer.Tile({
+        title: 'Esri – Uydu Görüntüsü',
+        type: 'base',
+        visible: false,
+        source: new ol.source.XYZ({
+            url: 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            attributions: 'Tiles © Esri'
         })
     });
 
@@ -145,6 +165,8 @@ export async function initMap() {
     });
 
     baseGroup.getLayers().push(baseLayer);
+    baseGroup.getLayers().push(satelliteLayer);
+    baseGroup.getLayers().push(osmBaseLayer);
     dataGroup.getLayers().push(cityLayer);
     dataGroup.getLayers().push(fayLayer);
     dataGroup.getLayers().push(vs30Layer);
@@ -219,10 +241,10 @@ export async function initMap() {
         const layer = e.element;
 
         if (layer.get('legendType') === 'eq') {
-                layer.on("change:visible", updateEqLegendVisibility);
-                updateEqLegendVisibility();
-            }
-        });
+            layer.on("change:visible", updateEqLegendVisibility);
+            updateEqLegendVisibility();
+        }
+    });
 }
 
 function updateEqLegendVisibility() {
@@ -264,5 +286,3 @@ export function updateMap(geojson) {
 
     map.getView().fit(source.getExtent(), { padding: [50, 50, 50, 50] });
 }
-
-
