@@ -95,6 +95,16 @@ legendBtn.addEventListener("click", () => {
         legendContainer.style.display === "block" ? "none" : "block";
 });
 
-document.getElementById("closePanel").onclick = () => {
-    infoPanel.style.display = "none";
+const showInfoOffcanvas = () => {
+    const infoOffcanvasDOM = document.getElementById("infoOffcanvas");
+    if (!infoOffcanvasDOM) return;
+
+    const offcanvas = new bootstrap.Offcanvas(infoOffcanvasDOM);
+    offcanvas.show();
 };
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", showInfoOffcanvas);
+} else {
+    showInfoOffcanvas();
+}
